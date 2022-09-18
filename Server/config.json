@@ -1,0 +1,13 @@
+{
+  "logger": {
+    "debug": true,
+    "log": true
+  },
+  "database": {
+    "user": "LoM",
+    "password": "LoM",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "LoM"
+  }
+}
