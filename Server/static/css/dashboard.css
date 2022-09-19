@@ -1,0 +1,14 @@
+#container {
+  border: solid;
+  border-width: 1px;
+}
+
+#left-column {
+  border: solid;
+  border-width: 1px;
+}
+
+#main-column {
+  border: solid;
+  border-width: 1px;
+}

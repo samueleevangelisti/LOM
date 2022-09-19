@@ -3,11 +3,15 @@
     "debug": true,
     "log": true
   },
-  "database": {
+  "databaseCore": {
     "user": "LoM",
     "password": "LoM",
     "host": "127.0.0.1",
     "port": 3306,
-    "database": "LoM"
+    "database": "LoM",
+    "autocommit": true
+  },
+  "database": {
+    "token_expire_seconds": 3600
   }
 }

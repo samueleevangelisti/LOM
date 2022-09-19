@@ -1,0 +1,7 @@
+CREATE TABLE Sessions (
+  id BIGINT NOT NULL,
+  token VARCHAR(255) NOT NULL,
+  expire_datetime DATETIME NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (id) REFERENCES Users(id) ON DELETE CASCADE
+);

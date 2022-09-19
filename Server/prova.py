@@ -1,5 +1,5 @@
 import requests
-from database import Database
+from server_lib.database import Database
 
 
 
