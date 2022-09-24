@@ -5,9 +5,14 @@ function login() {
   })
     .then((response) => {
       console.log(response);
-      location.href = '/dashboard';
+      if(response.success) {
+        location.href = '/dashboard';
+      } else {
+        alert(response.error);
+      }
     })
     .catch((error) => {
       console.log(error);
+      alert(JSON.stringify(error));
     });
 }

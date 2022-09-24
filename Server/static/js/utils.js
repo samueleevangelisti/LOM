@@ -84,6 +84,30 @@ function postRequest(url, bodyObj) {
     });
 }
 
+function putRequest(url, bodyObj) {
+  return fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Lom-Id': retrieveId(),
+      'Lom-Token': retrieveToken(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(bodyObj)
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((response) => {
+      if(response.id) {
+        storeId(response.id);
+      }
+      if(response.token) {
+        storeToken(response.token);
+      }
+      return response;
+    });
+}
+
 function patchRequest(url, bodyObj) {
   return fetch(url, {
     method: 'PATCH',
@@ -93,6 +117,28 @@ function patchRequest(url, bodyObj) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(bodyObj)
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((response) => {
+      if(response.id) {
+        storeId(response.id);
+      }
+      if(response.token) {
+        storeToken(response.token);
+      }
+      return response;
+    });
+}
+
+function deleteRequest(url) {
+  return fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Lom-Id': retrieveId(),
+      'Lom-Token': retrieveToken()
+    }
   })
     .then((response) => {
       return response.json();

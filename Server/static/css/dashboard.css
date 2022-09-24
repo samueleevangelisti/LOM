@@ -1,14 +1,17 @@
-#container {
-  border: solid;
-  border-width: 1px;
+#main {
+  margin-top: 10pt;
 }
 
-#left-column {
+table, th, td{
   border: solid;
   border-width: 1px;
+  padding: 5pt;
 }
 
-#main-column {
-  border: solid;
-  border-width: 1px;
+table {
+  border-collapse: collapse;
+}
+
+#delete-pin-button, #delete-rfid-button {
+  margin-left: 5pt;
 }

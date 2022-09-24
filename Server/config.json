@@ -13,5 +13,8 @@
   },
   "database": {
     "token_expire_seconds": 3600
+  },
+  "server": {
+    "pin_length": 8
   }
 }

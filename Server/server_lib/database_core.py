@@ -24,6 +24,7 @@ class DatabaseCore:
             row_list = [e for e in cursor]
         except Exception:
             row_list = None
+        connection.close()
         return row_list
 
 
