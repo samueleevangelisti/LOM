@@ -30,6 +30,11 @@ const int RC522_SS_PIN = 5;
 const int RC522_RST_PIN = 4;
 MFRC522 rc522{RC522_SS_PIN, RC522_RST_PIN};
 
+int HTTP_PORT = 80;
+String HTTP_GATEWAY_URL = String();
+
+StaticJsonDocument<513> json_document;
+DeserializationError json_deserialization_error;
 int mode = 0; // 0: pin, 1: rfid
 
 int pinLength = 8;
@@ -58,10 +63,6 @@ void changeMode(int newMode) {
     default:
       break;
   }
-}
-
-void debug(String text) {
-  Serial.println(text);
 }
 
 #endif

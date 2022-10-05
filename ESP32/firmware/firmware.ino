@@ -3,12 +3,16 @@
 #include <Keypad.h>
 #include <SPI.h>
 #include <MFRC522.h>
+#include <ArduinoJson.h>
+#include <WebServer.h>
+#include <HTTPClient.h>
 
 #include "Globals.h"
 #include "Lcd.h"
 #include "Buzzer.h"
 #include "Keypad.h"
 #include "Rc522.h"
+#include "Http.h"
 
 void setup()
 {
@@ -24,7 +28,12 @@ void setup()
   lcd_print("[INIT] RFID", "########");
   delay(500);
   rc522_init();
-  lcd_print("[ OK ] RFID", "################");
+  lcd_print("[ OK ] RFID", "##########");
+  delay(500);
+  lcd_print("[INIT] HTTP", "############");
+  delay(500);
+  http_init();
+  lcd_print("[INIT] HTTP", "################");
   delay(500);
 }
 

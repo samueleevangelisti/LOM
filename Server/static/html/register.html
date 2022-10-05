@@ -3,21 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="/assets/css/login.css">
+  <link rel="stylesheet" type="text/css" href="/assets/css/register.css">
   <script type="text/javascript" src="/assets/js/utils.js"></script>
-  <script type="text/javascript" src="/assets/js/login.js"></script>
+  <script type="text/javascript" src="/assets/js/register.js"></script>
   <title>LoM</title>
 </head>
 <body>
-  <h1>Login</h1>
+  <h1>Register</h1>
   <form>
     <input id="username" type="text" name="username" autocomplete="off">
     <label>username</label>
     <br>
-    <input id="password" type="password" name="password" autocomplete="off">
+    <input id="password" type="password" name="password">
     <label>password</label>
+    <br>
+    <input id="password2" type="password" name="password2">
+    <label>retype password</label>
   </form>
+  <button id="register-button" onclick="register()">Register</button>
   <button id="login-button" onclick="login()">Log In</button>
-  <button onclick="register()">Register</button>
 </body>
 </html>

@@ -6,13 +6,25 @@
   <link rel="stylesheet" type="text/css" href="/assets/css/dashboard.css">
   <script type="text/javascript" src="/assets/js/utils.js"></script>
   <script type="text/javascript" src="/assets/js/dashboard.js"></script>
-  <title>LOM</title>
+  <title>LoM</title>
 </head>
 <body>
   <h1>Dashboard</h1>
   <div>
     <button id="devices-button" onclick="showDevices()" disabled>Devices</button>
     <button id="users-button" onClick="showUsers()" disabled>Users</button>
+  </div>
+  <div id="add-device-div" hidden>
+    <form>
+      <input id="device-name" type="text" name="name">
+      <label>Name</label>
+      <br>
+      <input id="device-url" type="text" name="url">
+      <label>Url</label>
+      <br><input id="device-body" type="text" name="body">
+      <label>Body</label>
+    </form>
+    <button id="add-device-button" onclick="addDevice()">Add</button>
   </div>
   <div id="main"></div>
 </body>

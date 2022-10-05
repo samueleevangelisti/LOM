@@ -11,4 +11,4 @@ password = input('password: ')
 if not password:
     print('ERROR: password can\'t be empty')
     exit(1)
-print(Database.create_user(Database.user_level_admin, username, password))
+print(Database.create_user(username, password, Database.user_level_admin, True))

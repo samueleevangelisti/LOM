@@ -1,20 +1,39 @@
 {
-  "logger": {
-    "debug": true,
-    "log": true
-  },
-  "databaseCore": {
-    "user": "LoM",
-    "password": "LoM",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "database": "LoM",
-    "autocommit": true
-  },
-  "database": {
-    "token_expire_seconds": 3600
-  },
-  "server": {
-    "pin_length": 8
-  }
+	"loggerconsole": {
+		"debug": true,
+		"query": true,
+		"api": true,
+		"info": true,
+		"error": true
+	},
+	"loggerdatabase": {
+		"database_connection": {
+			"user": "LoM",
+			"password": "LoM",
+			"host": "127.0.0.1",
+			"port": 3306,
+			"database": "LoM",
+			"autocommit": true
+		},
+		"log": true,
+		"table": "Logs"
+	},
+	"logger": {
+		"log": true
+	},
+	"database": {
+		"database_connection": {
+			"user": "LoM",
+			"password": "LoM",
+			"host": "127.0.0.1",
+			"port": 3306,
+			"database": "LoM",
+			"autocommit": true
+		},
+		"token_expire_seconds": 3600
+	},
+	"server": {
+		"port": 8080,
+		"pin_length": 8
+	}
 }

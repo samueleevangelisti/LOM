@@ -1,4 +1,4 @@
-#main {
+#main, #device-name, #device-url, #device-body, #add-device-button {
   margin-top: 10pt;
 }
 
