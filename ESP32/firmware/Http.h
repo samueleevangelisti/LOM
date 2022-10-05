@@ -18,8 +18,8 @@ void http_handler() {
           + String("\"success\":false")
         + String("}"));
       } else {
-        Serial.println(json_document["gatewayUrl"]);
-        Serial.println(json_document["action"]);
+        Serial.println((const char *) json_document["gatewayUrl"]);
+        Serial.println((const char *) json_document["action"]);
       }
         break;
       default:
