@@ -13,9 +13,9 @@ void buzzer_beep(int channel, int frequency, int duration) {
 }
 
 void buzzer_beep() {
-  if(is_beep) {
+  if(isBeep) {
     buzzer_beep(BUZZER_CHANNEL, BUZZER_FREQUENCY, BUZZER_DELAY);
-    is_beep = false;
+    isBeep = false;
   }
 }
 

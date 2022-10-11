@@ -15,18 +15,21 @@ void lcd_print(String line1, String line2) {
 }
 
 void lcd_refresh() {
-  if(is_changed) {
+  if(isChanged) {
     switch(mode) {
       case 0:
-        lcd_print("PIN:", pinDisplay);
+        lcd_print("Enter PIN/RFID", pinDisplay);
         break;
-      case 1:
-        lcd_print("RFID:", rfid);
+      case 71:
+        lcd_print("WiFi ip", wifi_localIp());
+        delay(5000);
+        changeMode(0);
+        lcd_refresh();
         break;
       default:
         break;
     }
-    is_changed = false;
+    isChanged = false;
   }
 }
 

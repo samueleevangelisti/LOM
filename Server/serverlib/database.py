@@ -24,11 +24,17 @@ USER_LEVEL_USER = 9
 
 ################################################################################
 
-def retrieve_all_devices():
+def retrieve_devices(where_dict=None):
     '''
-    retrieve_all_devices()
+    retrieve_devices(where_dict=None)
     '''
-    return __database_connection.query('SELECT * FROM Devices;')
+    query_list = []
+    arg_tuple = ()
+    if where_dict:
+        for key in where_dict:
+            query_list.append(f"{key} = ?")
+            arg_tuple = (*arg_tuple, where_dict[key])
+    return __database_connection.query(f"SELECT * FROM Devices{' WHERE ' if len(query_list) > 0 else ''}{', '.join(query_list)};", arg_tuple)
 
 def create_device(name, url, body):
     '''
@@ -66,11 +72,17 @@ def delete_device(device_id):
 
 ################################################################################
 
-def retrieve_all_users():
+def retrieve_users(where_dict=None):
     '''
-    retrieve_all_users()
+    retrieve_users(where_dict=None)
     '''
-    row_list = __database_connection.query('SELECT * FROM Users;')
+    query_list = []
+    arg_tuple = ()
+    if where_dict:
+        for key in where_dict:
+            query_list.append(f"{key} = ?")
+            arg_tuple = (*arg_tuple, where_dict[key])
+    row_list = __database_connection.query(f"SELECT * FROM Users{' WHERE ' if len(query_list) > 0 else ''}{', '.join(query_list)};", arg_tuple)
     for row in row_list:
         row['active'] = bool(row['active'])
         row.pop('password')
@@ -234,7 +246,9 @@ def check_pin(pin):
     '''
     check_pin(pin)
     '''
-    row_list = __database_connection.query('SELECT id FROM Users WHERE pin = ?;', (pin, ))
+    row_list = retrieve_users({
+        'pin': pin
+    })
     if len(row_list) > 0:
         user_id = row_list[0]['id']
         logger.log('check_pin', logger.STATUS_SUCCESS, f"id: {user_id}")
@@ -253,7 +267,9 @@ def check_rfid(rfid):
     '''
     check_rfid(rfid)
     '''
-    row_list = __database_connection.query('SELECT id FROM Users WHERE rfid = ?;', (rfid, ))
+    row_list = retrieve_users({
+        'rfid': rfid
+    })
     if len(row_list) > 0:
         user_id = row_list[0]['id']
         logger.log('check_rfid', logger.STATUS_SUCCESS, f"id: {user_id}")

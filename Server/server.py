@@ -48,7 +48,7 @@ api.register_blueprint(proxy.router, url_prefix='/proxy')
 
 
 
-@api.route('/prova', methods=['GET'])
+@api.route('/localhost', methods=['GET'])
 def get_prova():
     '''
     get_prova()
@@ -62,7 +62,7 @@ def get_prova():
 
 
 
-@api.route('/prova', methods=['POST'])
+@api.route('/localhost', methods=['POST'])
 def post_prova():
     '''
     post_prova()

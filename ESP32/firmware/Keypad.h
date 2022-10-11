@@ -4,15 +4,21 @@
 void keypad_read() {
   pinKey = keypad.getKey();
   if(pinKey) {
-    changeMode(0);
-    pin.concat(pinKey);
-    pinDisplay.concat('*');
-    if(pin.length() == pinLength) {
-      pin = "";
-      pinDisplay = "";
-      is_beep = true;
+    switch(pinKey) {
+      case '#':
+        isChanged = true;
+        changeMode(71);
+        break;
+      default:
+        pin += pinKey;
+        pinDisplay += '*';
+        if(pin.length() == pinLength) {
+          // TODODSE in questo punto bisogna comunicare lo sblocco
+          changeMode(1);
+        }
+        break;
     }
-    is_changed = true;
+    isChanged = true;
     buzzer_beep_short();
   }
 }

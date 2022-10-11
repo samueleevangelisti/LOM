@@ -20,7 +20,7 @@ def get_devices():
     '''
     return {
         'success': True,
-        'data': database.retrieve_all_devices()
+        'data': database.retrieve_devices()
     }
 
 

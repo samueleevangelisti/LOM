@@ -30,7 +30,7 @@ def get_users():
     if response['success']:
         return {
             'success': True,
-            'data': database.retrieve_all_users()
+            'data': database.retrieve_users()
         }
     return {
         'success': False,

@@ -6,6 +6,9 @@ const byte LCD_COLUMNS = 16;
 const byte LCD_ROWS = 2;
 LiquidCrystal_I2C lcd(LCD_ADDRESS, 16, 2);
 
+const String WIFI_SSID = "TIM-32867173";
+const String WIFI_PASSWORD = "rbRWGmRFlmsXN3GulwBXByaG";
+
 const int BUZZER_FREQUENCY = 1500;
 const int BUZZER_FREQUENCY_SHORT = 1000;
 const int BUZZER_DELAY = 500;
@@ -33,9 +36,16 @@ MFRC522 rc522{RC522_SS_PIN, RC522_RST_PIN};
 int HTTP_PORT = 80;
 String HTTP_GATEWAY_URL = String();
 
+bool isSerial = false;
+String serialInput = String();
+String serialInputKey = String();
+String serialInputValue = String();
+WiFiClient wifi_client;
 StaticJsonDocument<513> json_document;
 DeserializationError json_deserialization_error;
-int mode = 0; // 0: pin, 1: rfid
+int mode = 0; // 0: input, 1: update, 7: status, 8: checking, 9: done
+bool isChanged = true;
+bool isBeep = false;
 
 int pinLength = 8;
 int adminPinLength = 8;
@@ -46,19 +56,16 @@ String pinDisplay = String();
 String rfidByte = String();
 String rfid = String();
 
-bool is_changed = true;
-bool is_beep = false;
-
 void changeMode(int newMode) {
   mode = newMode;
   switch(mode) {
-    case 0:
+    case 0: // inserimento input
+      pin = "";
+      pinDisplay = "";
       rfidByte = "";
       rfid = "";
       break;
-    case 1:
-      pin = "";
-      pinDisplay = "";
+    case 71: // wifi ip
       break;
     default:
       break;
