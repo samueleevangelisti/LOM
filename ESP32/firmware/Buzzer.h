@@ -13,14 +13,19 @@ void buzzer_beep(int channel, int frequency, int duration) {
 }
 
 void buzzer_beep() {
-  if(isBeep) {
-    buzzer_beep(BUZZER_CHANNEL, BUZZER_FREQUENCY, BUZZER_DELAY);
-    isBeep = false;
-  }
+  buzzer_beep(BUZZER_CHANNEL, BUZZER_FREQUENCY, BUZZER_DELAY);
 }
 
 void buzzer_beep_short() {
   buzzer_beep(BUZZER_CHANNEL, BUZZER_FREQUENCY_SHORT, BUZZER_DELAY_SHORT);
+}
+
+void buzzer_beep_tree() {
+  buzzer_beep(BUZZER_CHANNEL, BUZZER_FREQUENCY, BUZZER_DELAY);
+  delay(500);
+  buzzer_beep(BUZZER_CHANNEL, BUZZER_FREQUENCY, BUZZER_DELAY);
+  delay(500);
+  buzzer_beep(BUZZER_CHANNEL, BUZZER_FREQUENCY, BUZZER_DELAY);
 }
 
 #endif

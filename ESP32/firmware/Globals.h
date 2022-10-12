@@ -34,21 +34,16 @@ const int RC522_RST_PIN = 4;
 MFRC522 rc522{RC522_SS_PIN, RC522_RST_PIN};
 
 int HTTP_PORT = 80;
-String HTTP_GATEWAY_URL = String();
+String HTTP_GATEWAY_URL = "http://192.168.1.2:8080/devices/esp32";
+WebServer http_webServer(HTTP_PORT);
+HTTPClient http_client;
+int http_responseCode;
 
-bool isSerial = false;
-String serialInput = String();
-String serialInputKey = String();
-String serialInputValue = String();
-WiFiClient wifi_client;
 StaticJsonDocument<513> json_document;
-DeserializationError json_deserialization_error;
-int mode = 0; // 0: input, 1: update, 7: status, 8: checking, 9: done
-bool isChanged = true;
-bool isBeep = false;
+DeserializationError json_deserializationError;
+int mode = 0; // 0: input, 1: update, 2: delete, 3: done, 4: error, 7: status, 8: checking, 9: access
 
-int pinLength = 8;
-int adminPinLength = 8;
+int pinLength = 4;
 char pinKey;
 String pin = String();
 String pinDisplay = String();
@@ -65,7 +60,31 @@ void changeMode(int newMode) {
       rfidByte = "";
       rfid = "";
       break;
+    case 11: // update rfid
+      rfidByte = "";
+      rfid = "";
+      break;
+    case 12: // update rfid pin
+      pin = "";
+      pinDisplay = "";
+      break;
+    case 21: // delete rfid
+      pin = "";
+      pinDisplay = "";
+      break;
+    case 3: // done
+      break;
+    case 4: // error
+      break;
     case 71: // wifi ip
+      break;
+    case 81: // check pin
+      break;
+    case 82: // check rfid
+      break;
+    case 9: // access granted
+      break;
+    case 99: // access denied
       break;
     default:
       break;

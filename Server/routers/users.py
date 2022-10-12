@@ -44,22 +44,28 @@ def post_user():
     '''
     post_user()
     '''
-    data_dict = json.loads(flask.request.data.decode())
-    response = database.create_user(data_dict['username'], data_dict['password'], database.USER_LEVEL_USER, False)
-    if response['success']:
+    response = database.retrieve_users()
+    if len(response) < 10 ** config['pin_length']:
+        data_dict = json.loads(flask.request.data.decode())
+        response = database.create_user(data_dict['username'], data_dict['password'], database.USER_LEVEL_USER, False)
+        if response['success']:
+            return {
+                'success': True
+            }
         return {
-            'success': True
+            'sucess': False,
+            'error': response['error']
         }
     return {
-        'sucess': False,
-        'error': response['error']
+        'success': False,
+        'error': 'User list full'
     }
 
 
 
 @router.route('/<int:patch_user_id>', methods=['PATCH'])
 @utils.check_token
-def put_user(patch_user_id):
+def patch_user(patch_user_id):
     '''
     put_user(patch_user_id)
     '''

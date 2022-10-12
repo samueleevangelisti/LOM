@@ -81,8 +81,8 @@ def delete_rfid(data_dict):
 
 
 method_map = {
-    'action_pin': action_pin,
-    'action_rfid': action_rfid,
-    'add_rfid': add_rfid,
-    'delete_rfid': delete_rfid
+    'actionPin': action_pin,
+    'actionRfid': action_rfid,
+    'addRfid': add_rfid,
+    'deleteRfid': delete_rfid
 }

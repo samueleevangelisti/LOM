@@ -11,10 +11,10 @@
 #include "Wifi.h"
 #include "Lcd.h"
 #include "Buzzer.h"
-#include "Keypad.h"
-#include "Rc522.h"
 #include "Json.h"
 #include "Http.h"
+#include "Keypad.h"
+#include "Rc522.h"
 
 void setup()
 {
@@ -48,6 +48,7 @@ void setup()
   lcd_print("[ OK ] HTTP", "################");
   Serial.println("[ OK ] HTTP");
   delay(500);
+  lcd_refresh();
 }
 
 
@@ -58,6 +59,4 @@ void loop()
   keypad_read();
   
   rc522_read();
-
-  lcd_refresh();
 }

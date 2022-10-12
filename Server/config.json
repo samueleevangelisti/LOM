@@ -34,6 +34,6 @@
 	},
 	"server": {
 		"port": 8080,
-		"pin_length": 8
+		"pin_length": 4
 	}
 }

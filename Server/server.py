@@ -74,4 +74,4 @@ def post_prova():
 
 
 if __name__ == '__main__':
-    api.run(port=config['port'])
+    api.run(host='0.0.0.0', port=config['port'])

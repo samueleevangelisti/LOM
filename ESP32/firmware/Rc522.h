@@ -8,16 +8,49 @@ void rc522_init() {
 
 void rc522_read() {
   if(rc522.PICC_IsNewCardPresent() && rc522.PICC_ReadCardSerial()) {
-    changeMode(0);
+    rfid = "";
     for(int i = 0; i < rc522.uid.size; i++) {
       rfidByte = "0" + String(rc522.uid.uidByte[i], HEX);
       rfid += rfidByte.substring(rfidByte.length() - 2);
     }
     rc522.PICC_HaltA();
     rc522.PCD_StopCrypto1();
-    isChanged = true;
     buzzer_beep_short();
-    // TODODSE qui bisogna inviare il codice al server
+    switch(mode) {
+      case 0:
+        changeMode(82);
+        lcd_refresh();
+        if(http_post("actionRfid", String("{")
+          + String("\"rfid\":\"") + rfid + String("\"")
+        + String("}"))) {
+          if((bool) json_document["success"]) {
+            changeMode(9);
+            lcd_refresh();
+            buzzer_beep();
+            changeMode(0);
+            lcd_refresh();
+          } else {
+            changeMode(99);
+            lcd_refresh();
+            buzzer_beep_tree();
+            changeMode(0);
+            lcd_refresh();
+          }
+        } else {
+          changeMode(4);
+          lcd_refresh();
+          buzzer_beep_tree();
+          changeMode(0);
+          lcd_refresh();
+        }
+        break;
+      case 11:
+        changeMode(12);
+        lcd_refresh();
+        break;
+      default:
+        break;  
+    }
   }
 }
 
