@@ -45,7 +45,7 @@ def post_device():
     response = database.check_level(user_id, database.USER_LEVEL_ADMIN)
     if response['success']:
         data_dict = json.loads(flask.request.data.decode())
-        response = database.create_device(data_dict['name'], data_dict['url'], data_dict['body'])
+        response = database.create_device(data_dict['name'], data_dict['url'])
         if response['success']:
             return {
                 'success': True

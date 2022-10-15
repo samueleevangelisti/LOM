@@ -49,9 +49,9 @@ api.register_blueprint(proxy.router, url_prefix='/proxy')
 
 
 @api.route('/localhost', methods=['GET'])
-def get_prova():
+def get_localhost():
     '''
-    get_prova()
+    get_localhost()
     '''
     return {
         'success': True,
@@ -62,13 +62,27 @@ def get_prova():
 
 
 
-@api.route('/localhost', methods=['POST'])
-def post_prova():
+@api.route('/localhost', methods=['PATCH'])
+def patch_localhost():
     '''
-    post_prova()
+    patch_localhost()
     '''
     return {
         'success': True
+    }
+
+
+
+@api.route('/localhost/info', methods=['GET'])
+def get_localhost_info():
+    '''
+    get_localhost_info()
+    '''
+    return {
+        'success': True,
+        'data': {
+            'switch1': 'boolean'
+        }
     }
 
 

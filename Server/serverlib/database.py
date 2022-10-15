@@ -36,12 +36,12 @@ def retrieve_devices(where_dict=None):
             arg_tuple = (*arg_tuple, where_dict[key])
     return __database_connection.query(f"SELECT * FROM Devices{' WHERE ' if len(query_list) > 0 else ''}{', '.join(query_list)};", arg_tuple)
 
-def create_device(name, url, body):
+def create_device(name, url):
     '''
     create_device()
     '''
     try:
-        __database_connection.query('INSERT INTO Devices(name, url, body) VALUES (?, ?, ?);', (name, url, body, ))
+        __database_connection.query('INSERT INTO Devices(name, url) VALUES (?, ?);', (name, url, ))
         logger.log('create_device', logger.STATUS_SUCCESS, f"name: {name}")
         return {
             'success': True
