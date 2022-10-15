@@ -5,13 +5,13 @@ import json
 import random
 import flask
 
-from serverlib import database, utils
+from serverlib import commons
+from serverlib import utils
+from serverlib import database
 
 
 
-with open('config.json', 'r', encoding='utf-8') as f:
-    config = json.loads(f.read())['server']
-    f.close()
+_config = commons.config['server']
 
 
 
@@ -19,7 +19,7 @@ router = flask.Blueprint('users', __name__)
 
 
 
-@router.route('/', methods=['GET'])
+@router.route('', methods=['GET'])
 @utils.check_token
 def get_users():
     '''
@@ -39,13 +39,13 @@ def get_users():
 
 
 
-@router.route('/', methods=['POST'])
+@router.route('', methods=['POST'])
 def post_user():
     '''
     post_user()
     '''
     response = database.retrieve_users()
-    if len(response) < 10 ** config['pin_length']:
+    if len(response) < 10 ** _config['pin_length']:
         data_dict = json.loads(flask.request.data.decode())
         response = database.create_user(data_dict['username'], data_dict['password'], database.USER_LEVEL_USER, False)
         if response['success']:
@@ -78,7 +78,7 @@ def patch_user(patch_user_id):
             if data_dict['pin'] is not None:
                 response['success'] = False
                 while not response['success']:
-                    pin = ''.join([str(e(None)) for e in [lambda x: random.randint(0, 9)] * config['pin_length']])
+                    pin = ''.join([str(e(None)) for e in [lambda x: random.randint(0, 9)] * _config['pin_length']])
                     response = database.update_pin(patch_user_id, pin)
                 response_dict['pin'] = pin
             else:

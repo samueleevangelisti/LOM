@@ -1,17 +1,21 @@
 '''
 server.py
 '''
-import random
-import json
 import flask
 
-from routers import register, login, dashboard, devices, users, proxy
+from serverlib import commons
+from serverlib import loggerconsole
+from serverlib import database
+from routers import register
+from routers import login
+from routers import dashboard
+from routers import devices
+from routers import users
+from routers import proxy
 
 
 
-with open('config.json', 'r', encoding='utf-8') as f:
-    config = json.loads(f.read())['server']
-    f.close()
+_config = commons.config['server']
 
 
 
@@ -56,7 +60,16 @@ def get_localhost():
     return {
         'success': True,
         'data': {
-            'switch1': random.randint(0, 1) == 0
+            'boolean': True,
+            'number': 1,
+            'string': 'prova',
+            'list': 'uno',
+            'data': {
+                'boolean': True,
+                'number': 1,
+                'string': 'prova',
+                'list': 'uno'
+            }
         }
     }
 
@@ -81,11 +94,23 @@ def get_localhost_info():
     return {
         'success': True,
         'data': {
-            'switch1': 'boolean'
+            'boolean': 'boolean',
+            'number': 'number',
+            'string': 'string',
+            'list': ['uno','due','tre'],
+            'data': {
+                'boolean': 'boolean',
+                'number': 'number',
+                'string': 'string',
+                'list': ['uno','due','tre']
+            }
         }
     }
 
 
 
 if __name__ == '__main__':
-    api.run(host='0.0.0.0', port=config['port'])
+    loggerconsole.info('Initialization')
+    commons.init_pin_list([user['pin'] for user in database.retrieve_users()])
+    loggerconsole.info('Done initialization')
+    api.run(host='0.0.0.0', port=_config['port'])

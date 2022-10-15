@@ -1,4 +1,8 @@
-from server_lib.database import Database
+'''
+bootstrap.py
+'''
+import sys
+from serverlib import database
 
 
 
@@ -6,9 +10,9 @@ print('LOM initialization')
 username = input('username: ')
 if not username:
     print('ERROR: username can\'t be empty')
-    exit(1)
+    sys.exit(1)
 password = input('password: ')
 if not password:
     print('ERROR: password can\'t be empty')
-    exit(1)
-print(Database.create_user(username, password, Database.user_level_admin, True))
+    sys.exit(1)
+print(database.create_user(username, password, database.USER_LEVEL_ADMIN, True))

@@ -13,7 +13,7 @@ router = flask.Blueprint('login', __name__)
 
 
 
-@router.route('/', methods=['GET'])
+@router.route('', methods=['GET'])
 def get_login():
     '''
     get_login()
@@ -22,7 +22,7 @@ def get_login():
 
 
 
-@router.route('/', methods=['POST'])
+@router.route('', methods=['POST'])
 def post_login():
     '''
     post_login()

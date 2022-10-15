@@ -23,7 +23,7 @@ void setup()
   lcd_print("[INIT] WIFI", "##");
   Serial.println("[INIT] WIFI");
   delay(500);
-  wifi_connect(WIFI_SSID, WIFI_PASSWORD);
+  wifi_init(WIFI_SSID, WIFI_PASSWORD);
   lcd_print("[ OK ] WIFI", "####");
   Serial.println("[ OK ] WIFI");
   delay(500);

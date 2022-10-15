@@ -13,7 +13,7 @@ router = flask.Blueprint('proxy', __name__)
 
 
 
-@router.route('/', methods=['POST'])
+@router.route('', methods=['POST'])
 @utils.check_token
 def post_proxy():
     '''

@@ -2,23 +2,21 @@
 database.py
 '''
 import datetime
-import json
 import secrets
 import bcrypt
 import mariadb
 
+from serverlib import commons
 from serverlib import logger
 from serverlib.databaseconnection import DatabaseConnection
 
 
 
-with open('config.json', 'r', encoding='utf-8') as f:
-    __config = json.loads(f.read())['database']
-    f.close()
+_config = commons.config['database']
 
 
 
-__database_connection = DatabaseConnection(__config['database_connection'])
+_database_connection = DatabaseConnection(_config['database_connection'])
 USER_LEVEL_ADMIN = 0
 USER_LEVEL_USER = 9
 
@@ -34,14 +32,14 @@ def retrieve_devices(where_dict=None):
         for key in where_dict:
             query_list.append(f"{key} = ?")
             arg_tuple = (*arg_tuple, where_dict[key])
-    return __database_connection.query(f"SELECT * FROM Devices{' WHERE ' if len(query_list) > 0 else ''}{', '.join(query_list)};", arg_tuple)
+    return _database_connection.query(f"SELECT * FROM Devices{' WHERE ' if len(query_list) > 0 else ''}{', '.join(query_list)};", arg_tuple)
 
 def create_device(name, url):
     '''
     create_device()
     '''
     try:
-        __database_connection.query('INSERT INTO Devices(name, url) VALUES (?, ?);', (name, url, ))
+        _database_connection.query('INSERT INTO Devices(name, url) VALUES (?, ?);', (name, url, ))
         logger.log('create_device', logger.STATUS_SUCCESS, f"name: {name}")
         return {
             'success': True
@@ -58,7 +56,7 @@ def delete_device(device_id):
     delete_device(device_id)
     '''
     try:
-        __database_connection.query('DELETE FROM Devices WHERE id = ?;', (device_id, ))
+        _database_connection.query('DELETE FROM Devices WHERE id = ?;', (device_id, ))
         logger.log('delete_device', logger.STATUS_SUCCESS, f"id: {device_id}")
         return {
             'success': True
@@ -82,7 +80,7 @@ def retrieve_users(where_dict=None):
         for key in where_dict:
             query_list.append(f"{key} = ?")
             arg_tuple = (*arg_tuple, where_dict[key])
-    row_list = __database_connection.query(f"SELECT * FROM Users{' WHERE ' if len(query_list) > 0 else ''}{', '.join(query_list)};", arg_tuple)
+    row_list = _database_connection.query(f"SELECT * FROM Users{' WHERE ' if len(query_list) > 0 else ''}{', '.join(query_list)};", arg_tuple)
     for row in row_list:
         row['active'] = bool(row['active'])
         row.pop('password')
@@ -92,10 +90,10 @@ def create_user(username, password, level, active):
     '''
     create_user(username, password, level, active)
     '''
-    if len(__database_connection.query('SELECT * FROM Users WHERE username = ?;', (username, ))) == 0:
+    if len(_database_connection.query('SELECT * FROM Users WHERE username = ?;', (username, ))) == 0:
         password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         try:
-            __database_connection.query('INSERT INTO Users(username, password, level, active) VALUES (?, ?, ?, ?);', (username, password_hash, level, active, ))
+            _database_connection.query('INSERT INTO Users(username, password, level, active) VALUES (?, ?, ?, ?);', (username, password_hash, level, active, ))
             logger.log('create_user', logger.STATUS_SUCCESS, f"username: {username}")
             return {
                 'success': True
@@ -118,7 +116,7 @@ def delete_user(user_id):
     delete_user(user_id)
     '''
     try:
-        __database_connection.query('DELETE FROM Users WHERE id = ?;', (user_id, ))
+        _database_connection.query('DELETE FROM Users WHERE id = ?;', (user_id, ))
         logger.log('delete_user', logger.STATUS_SUCCESS, f"id: {user_id}")
         return {
             'success': True
@@ -135,7 +133,7 @@ def update_pin(user_id, pin):
     update_pin(user_id, pin)
     '''
     try:
-        __database_connection.query('UPDATE Users SET pin = ? WHERE id = ?;', (pin, user_id, ))
+        _database_connection.query('UPDATE Users SET pin = ? WHERE id = ?;', (pin, user_id, ))
         logger.log('update_pin', logger.STATUS_SUCCESS, f"id: {user_id}")
         return {
             'success': True
@@ -152,7 +150,7 @@ def delete_pin(user_id):
     delete_pin(user_id)
     '''
     try:
-        __database_connection.query('UPDATE Users SET pin = NULL WHERE id = ?;', (user_id, ))
+        _database_connection.query('UPDATE Users SET pin = NULL WHERE id = ?;', (user_id, ))
         logger.log('delete_pin', logger.STATUS_SUCCESS, f"id: {user_id}")
         return {
             'success': True
@@ -169,7 +167,7 @@ def update_rfid(user_id, rfid):
     update_rfid(user_id, rfid)
     '''
     try:
-        __database_connection.query('UPDATE Users SET rfid = ? WHERE id = ?;', (rfid, user_id, ))
+        _database_connection.query('UPDATE Users SET rfid = ? WHERE id = ?;', (rfid, user_id, ))
         logger.log('update_rfid', logger.STATUS_SUCCESS, f"id: {user_id}")
         return {
             'success': True
@@ -186,7 +184,7 @@ def delete_rfid(user_id):
     delete_rfid(user_id)
     '''
     try:
-        __database_connection.query('UPDATE Users SET rfid = NULL WHERE id = ?;', (user_id, ))
+        _database_connection.query('UPDATE Users SET rfid = NULL WHERE id = ?;', (user_id, ))
         logger.log('delete_rfid', logger.STATUS_SUCCESS, f"id: {user_id}")
         return {
             'success': True
@@ -203,7 +201,7 @@ def update_active(user_id, active):
     update_active(user_id, active)
     '''
     try:
-        __database_connection.query('UPDATE Users SET active = ? WHERE id = ?;', (active, user_id, ))
+        _database_connection.query('UPDATE Users SET active = ? WHERE id = ?;', (active, user_id, ))
         logger.log('update_active', logger.STATUS_SUCCESS, f"id: {user_id}")
         return {
             'success': True
@@ -219,7 +217,7 @@ def check_password(username, password):
     '''
     check_password(username, password)
     '''
-    row_list = __database_connection.query('SELECT id, password FROM Users WHERE username = ?;', (username, ))
+    row_list = _database_connection.query('SELECT id, password FROM Users WHERE username = ?;', (username, ))
     if len(row_list) > 0:
         user_id = row_list[0]['id']
         password_hash = row_list[0]['password']
@@ -287,7 +285,7 @@ def check_level(user_id, level, user_id_2=None, level_2=None):
     '''
     check_level(user_id, level, user_id_2=None, level_2=None)
     '''
-    row_list = __database_connection.query('SELECT level FROM Users WHERE id = ?;', (user_id, ))
+    row_list = _database_connection.query('SELECT level FROM Users WHERE id = ?;', (user_id, ))
     if len(row_list) > 0:
         user_level = row_list[0]['level']
         if user_level <= level:
@@ -296,7 +294,7 @@ def check_level(user_id, level, user_id_2=None, level_2=None):
                 return {
                     'success': True
                 }
-            row_list = __database_connection.query('SELECT level FROM Users WHERE id = ?;', (user_id_2, ))
+            row_list = _database_connection.query('SELECT level FROM Users WHERE id = ?;', (user_id_2, ))
             if len(row_list) > 0:
                 user_level_2 = row_list[0]['level']
                 if user_level_2 > user_level and user_level <= level_2:
@@ -333,7 +331,7 @@ def check_active(username):
     '''
     check_active(username)
     '''
-    row_list = __database_connection.query('SELECT active FROM Users WHERE username = ?;', (username, ))
+    row_list = _database_connection.query('SELECT active FROM Users WHERE username = ?;', (username, ))
     if len(row_list) > 0:
         active = row_list[0]['active']
         if active:
@@ -360,9 +358,9 @@ def create_session(user_id, token):
     '''
     create_session(user_id, token)
     '''
-    if len(__database_connection.query('SELECT * FROM Sessions where id = ?;', (user_id, ))) == 0:
+    if len(_database_connection.query('SELECT * FROM Sessions where id = ?;', (user_id, ))) == 0:
         try:
-            __database_connection.query('INSERT INTO Sessions(id, token, expire_datetime) VALUES (?, ?, ?);', (user_id, token, datetime.datetime.now() + datetime.timedelta(seconds=__config['token_expire_seconds']), ))
+            _database_connection.query('INSERT INTO Sessions(id, token, expire_datetime) VALUES (?, ?, ?);', (user_id, token, datetime.datetime.now() + datetime.timedelta(seconds=_config['token_expire_seconds']), ))
             logger.log('create_session', logger.STATUS_SUCCESS, f"id: {user_id}")
             return {
                 'success': True
@@ -381,7 +379,7 @@ def update_session(user_id, token):
     update_session(user_id, token)
     '''
     try:
-        __database_connection.query('UPDATE Sessions SET token = ?, expire_datetime = ? WHERE id = ?;', (token, datetime.datetime.now() + datetime.timedelta(seconds=__config['token_expire_seconds']), user_id, ))
+        _database_connection.query('UPDATE Sessions SET token = ?, expire_datetime = ? WHERE id = ?;', (token, datetime.datetime.now() + datetime.timedelta(seconds=_config['token_expire_seconds']), user_id, ))
         logger.log('update_session', logger.STATUS_SUCCESS, f"id: {user_id}")
         return {
             'success': True
@@ -397,7 +395,7 @@ def check_token(user_id, token):
     '''
     check_token(user_id, token)
     '''
-    row_list = __database_connection.query('SELECT token, expire_datetime FROM Sessions WHERE id = ?;', (user_id, ))
+    row_list = _database_connection.query('SELECT token, expire_datetime FROM Sessions WHERE id = ?;', (user_id, ))
     if len(row_list) > 0:
         stored_token = row_list[0]['token']
         expire_datetime = row_list[0]['expire_datetime']

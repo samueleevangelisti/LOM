@@ -9,7 +9,7 @@ router = flask.Blueprint('router', __name__)
 
 
 
-@router.route('/', methods=['GET'])
+@router.route('', methods=['GET'])
 def get_register():
     '''
     get_register()

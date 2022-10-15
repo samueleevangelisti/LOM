@@ -1,16 +1,13 @@
 '''
 logger.py
 '''
-import json
-
+from serverlib import commons
 from serverlib import loggerconsole
 from serverlib import loggerdatabase
 
 
 
-with open('config.json', 'r', encoding='utf-8') as f:
-    __config = json.loads(f.read())['logger']
-    f.close()
+_config = commons.config['logger']
 
 
 
@@ -23,7 +20,7 @@ def log(operation, status, log):
     '''
     log(operation, status, log)
     '''
-    if __config['log']:
+    if _config['log']:
         if status == STATUS_SUCCESS:
             loggerconsole.info(f"({operation}) {log}")
         elif status == STATUS_ERROR:

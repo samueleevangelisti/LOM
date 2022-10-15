@@ -1,19 +1,16 @@
 '''
 loggerdatabase.py
 '''
-import json
-
+from serverlib import commons
 from serverlib.databaseconnection import DatabaseConnection
 
 
 
-with open('config.json', 'r', encoding='utf-8') as f:
-    __config = json.loads(f.read())['loggerdatabase']
-    f.close()
+_config = commons.config['loggerdatabase']
 
 
 
-database_connection = DatabaseConnection(__config['database_connection'])
+_database_connection = DatabaseConnection(_config['database_connection'])
 
 
 
@@ -21,5 +18,5 @@ def create_log(operation, status, log):
     '''
     create_log(operation, status, log)
     '''
-    if __config['log']:
-        database_connection.query(f"INSERT INTO {__config['table']}(operation, status, log) VALUES (?, ?, ?);", (operation, status, log, ))
+    if _config['log']:
+        _database_connection.query(f"INSERT INTO {_config['table']}(operation, status, log) VALUES (?, ?, ?);", (operation, status, log, ))

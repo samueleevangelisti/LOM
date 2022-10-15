@@ -15,33 +15,75 @@ function orderObj(obj) {
 function generateCommandLiArr(obj) {
   let li;
   let label;
+  let ul;
   let input;
+  let select;
+  let option;
   return Object.keys(obj)
     .sort()
     .map((key) => {
-      switch(obj[key][0]) {
-        case '{':
-          break;
-        case 'b':
-          li = document.createElement('li');
+      li = document.createElement('li');
+      if(typeof(obj[key]) == 'object') {
+        if(Array.isArray(obj[key])) {
           li.setAttribute('key', key);
           label = document.createElement('label');
           label.innerHTML = `${key}:`;
           li.appendChild(label);
-          input = document.createElement('input');
-          input.type = 'checkbox'
-          li.appendChild(input);
-          return li;
-          break;
-        case 'n':
-          break;
-        case 's':
-          break;
-        case '[':
-          break;
-        default:
-          break;
+          select = document.createElement('select');
+          option = document.createElement('option');
+          select.appendChild(option);
+          obj[key].forEach((value) => {
+            option = document.createElement('option');
+            option.value = value;
+            option.innerHTML = value;
+            select.appendChild(option);
+          });
+          li.appendChild(select);
+        } else {
+          li.setAttribute('key', key);
+          label = document.createElement('label');
+          label.innerHTML = `${key}:`;
+          li.appendChild(label);
+          ul = document.createElement('ul');
+          generateCommandLiArr(obj[key]).forEach((li) => {
+            ul.appendChild(li);
+          });
+          li.appendChild(ul);
+        }
+      } else {
+        switch(obj[key]) {
+          case 'boolean':
+            li.setAttribute('key', key);
+            label = document.createElement('label');
+            label.innerHTML = `${key}:`;
+            li.appendChild(label);
+            input = document.createElement('input');
+            input.type = 'checkbox'
+            li.appendChild(input);
+            break;
+          case 'number':
+            li.setAttribute('key', key);
+            label = document.createElement('label');
+            label.innerHTML = `${key}:`;
+            li.appendChild(label);
+            input = document.createElement('input');
+            input.type = 'number'
+            li.appendChild(input);
+            break;
+          case 'string':
+            li.setAttribute('key', key);
+            label = document.createElement('label');
+            label.innerHTML = `${key}:`;
+            li.appendChild(label);
+            input = document.createElement('input');
+            input.type = 'text'
+            li.appendChild(input);
+            break;
+          default:
+            break;
+        }
       }
+      return li;
     });
 }
 
@@ -52,7 +94,7 @@ function showDevices() {
       console.log(response);
       if(response.success) {
         globalDeviceArr = response.data;
-        let columnArr = ['id', 'name', 'url', 'body', 'status', 'command']
+        let columnArr = ['id', 'name', 'url', 'status', 'command']
         let table;
         let tr;
         let th;
@@ -60,6 +102,7 @@ function showDevices() {
         let pre;
         let button;
         let ul;
+        let li;
         table = document.createElement('table');
         tr = document.createElement('tr');
         for(let i = 0; i < columnArr.length; i++) {
@@ -75,12 +118,6 @@ function showDevices() {
           for(let i = 0; i < columnArr.length; i++) {
             td = document.createElement('td');
             switch(columnArr[i]) {
-              case 'body':
-                pre = document.createElement('pre');
-                pre.id = `${device.id}-body-pre`;
-                pre.innerHTML = 'Loading...';
-                td.appendChild(pre);
-                break;
               case 'status':
                 pre = document.createElement('pre');
                 pre.id = `${device.id}-status-pre`;
@@ -94,12 +131,11 @@ function showDevices() {
                 td.appendChild(button);
                 break;
               case 'command':
-                // TODO DSE adesso il body non viene giù con i dati ma a seguito di un caricamento successivo con funzione dedicata
                 ul = document.createElement('ul');
                 ul.id = `${device.id}-command-ul`;
-                generateCommandLiArr(JSON.parse(device.body)).forEach((li) => {
-                  ul.appendChild(li);
-                });
+                li = document.createElement('li');
+                li.innerHTML = 'Loading...';
+                ul.appendChild(li);
                 td.appendChild(ul);
                 button = document.createElement('button');
                 button.innerHTML = 'Apply';
@@ -126,14 +162,17 @@ function showDevices() {
         });
         showContent(table);
 
-        (function refreshAll(idArr, index = 0) {
+        (function bodyAll(idArr, index=0) {
           if(index < idArr.length) {
-            refreshPromise(idArr[index])
+            bodyPromise(idArr[index])
               .finally(() => {
-                refreshAll(idArr, index + 1);
+                refreshPromise(idArr[index])
+                  .finally(() => {
+                    bodyAll(idArr, index + 1);
+                  });
               });
           }
-        })(response.data.map((device) => {
+        })(globalDeviceArr.map((device) => {
           return device.id;
         }));
 
@@ -183,17 +222,20 @@ function addDevice() {
 function bodyPromise(id) {
   return new Promise((resolve, reject) => {
     postRequest('/proxy', {
-      url: globalDeviceArr.filter((device) => {
+      url: `${globalDeviceArr.filter((device) => {
         return device.id == id;
-      })[0].url,
+      })[0].url}/info`,
       method: 'GET',
       data: null
     })
       .then((response) => {
         console.log(response);
         if(response.success) {
-          let pre = document.getElementById(`${id}-body-pre`);
-          pre.innerHTML = JSON.stringify(orderObj(response.data), null, 2);
+          let ul = document.getElementById(`${id}-command-ul`);
+          ul.innerHTML = '';
+          generateCommandLiArr(response.data).forEach((li) => {
+            ul.appendChild(li);
+          });
           resolve();
         } else {
           alert(response.error);
@@ -256,14 +298,17 @@ function getCommandObj(ul) {
             commandObj[li.getAttribute('key')] = li.childNodes[1].checked;
             break;
           case 'number':
-            commandObj[li.getAttribute('key')] = parseInt(li.childNodes[1].value);
+            commandObj[li.getAttribute('key')] = parseInt(li.childNodes[1].value) || null;
             break;
           case 'text':
-            commandObj[li.getAttribute('key')] = li.childNodes[1].value;
+            commandObj[li.getAttribute('key')] = li.childNodes[1].value || null;
             break;
           default:
             break;
         }
+        break;
+      case 'SELECT':
+        commandObj[li.getAttribute('key')] = li.childNodes[1].value || null;
         break;
       default:
         break;

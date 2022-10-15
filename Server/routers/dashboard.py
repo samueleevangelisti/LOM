@@ -3,7 +3,8 @@ dashboard.py
 '''
 import flask
 
-from serverlib import database, utils
+from serverlib import utils
+from serverlib import database
 
 
 
@@ -11,7 +12,7 @@ router = flask.Blueprint('dashboard', __name__)
 
 
 
-@router.route('/', methods=['GET'])
+@router.route('', methods=['GET'])
 def get_dashboard():
     '''
     get_dashboard()

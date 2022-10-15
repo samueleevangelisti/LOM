@@ -5,7 +5,10 @@ void http_handler() {
   switch(http_webServer.method()) {
     case HTTP_GET:
       http_webServer.send(200, "application/json", String("{")
-        + String("\"gatewayUrl\":\"") + HTTP_GATEWAY_URL + String("\"")
+        + String("\"success\":true,")
+        + String("\"data\":{")
+          + String("\"gatewayUrl\":\"") + HTTP_GATEWAY_URL + String("\"")
+        + String("}")
       + String("}"));
       break;
     case HTTP_PATCH:
@@ -36,8 +39,25 @@ void http_handler() {
   }
 }
 
+void http_info_handler() {
+  switch(http_webServer.method()) {
+    case HTTP_GET:
+      http_webServer.send(200, "application/json", String("{")
+        + String("\"success\":true,")
+            + String("\"data\":{")
+          + String("\"gatewayUrl\":\"string\",")
+          + String("\"action\":\"boolean\"")
+        + String("}")
+      + String("}"));
+      break;
+    default:
+      break;
+  }
+}
+
 void http_init() {
   http_webServer.on("/", http_handler);
+  http_webServer.on("/info", http_info_handler);
   http_webServer.begin();
 }
 

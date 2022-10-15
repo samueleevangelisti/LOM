@@ -6,8 +6,12 @@ const byte LCD_COLUMNS = 16;
 const byte LCD_ROWS = 2;
 LiquidCrystal_I2C lcd(LCD_ADDRESS, 16, 2);
 
-const String WIFI_SSID = "TIM-32867173";
-const String WIFI_PASSWORD = "rbRWGmRFlmsXN3GulwBXByaG";
+// (1)
+// const String WIFI_SSID = "TIM-32867173";
+// const String WIFI_PASSWORD = "rbRWGmRFlmsXN3GulwBXByaG";
+// (2)
+const String WIFI_SSID = "Telecom-94382493";
+const String WIFI_PASSWORD = "-Lola0123456-";
 
 const int BUZZER_FREQUENCY = 1500;
 const int BUZZER_FREQUENCY_SHORT = 1000;
@@ -34,7 +38,7 @@ const int RC522_RST_PIN = 4;
 MFRC522 rc522{RC522_SS_PIN, RC522_RST_PIN};
 
 int HTTP_PORT = 80;
-String HTTP_GATEWAY_URL = "http://192.168.1.2:8080/devices/esp32";
+String HTTP_GATEWAY_URL = String();
 WebServer http_webServer(HTTP_PORT);
 HTTPClient http_client;
 int http_responseCode;

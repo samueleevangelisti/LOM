@@ -1,62 +1,61 @@
 '''
 loggerconsole.py
 '''
-import json
 import datetime
 
-
-
-with open('config.json', 'r', encoding='utf-8') as f:
-    __config = json.loads(f.read())['loggerconsole']
-    f.close()
+from serverlib import commons
 
 
 
-__COLOR_NONE = '\033[0m'
-__COLOR_BLUE = '\033[94m'
-__COLOR_GREEN = '\033[92m'
-__COLOR_YELLOW = '\033[93m'
-__COLOR_ORANGE = '\033[33m'
-__COLOR_RED = '\033[91m'
-__COLOR_PURPLE = '\033[95m'
+_config = commons.config['loggerconsole']
+
+
+
+_COLOR_NONE = '\033[0m'
+_COLOR_BLUE = '\033[94m'
+_COLOR_GREEN = '\033[92m'
+_COLOR_YELLOW = '\033[93m'
+_COLOR_ORANGE = '\033[33m'
+_COLOR_RED = '\033[91m'
+_COLOR_PURPLE = '\033[95m'
 
 def blue(text):
     '''
     blue(text)
     '''
-    return f"{__COLOR_BLUE}{text}{__COLOR_NONE}"
+    return f"{_COLOR_BLUE}{text}{_COLOR_NONE}"
 
 def green(text):
     '''
     green(text)
     '''
-    return f"{__COLOR_GREEN}{text}{__COLOR_NONE}"
+    return f"{_COLOR_GREEN}{text}{_COLOR_NONE}"
 
 def yellow(text):
     '''
     yellow(text)
     '''
-    return f"{__COLOR_YELLOW}{text}{__COLOR_NONE}"
+    return f"{_COLOR_YELLOW}{text}{_COLOR_NONE}"
 
 def orange(text):
     '''
     yellow(text)
     '''
-    return f"{__COLOR_ORANGE}{text}{__COLOR_NONE}"
+    return f"{_COLOR_ORANGE}{text}{_COLOR_NONE}"
 
 def red(text):
     '''
     red(text)
     '''
-    return f"{__COLOR_RED}{text}{__COLOR_NONE}"
+    return f"{_COLOR_RED}{text}{_COLOR_NONE}"
 
 def purple(text):
     '''
     purple(text)
     '''
-    return f"{__COLOR_PURPLE}{text}{__COLOR_NONE}"
+    return f"{_COLOR_PURPLE}{text}{_COLOR_NONE}"
 
-def __log(text):
+def _log(text):
     '''
     __log(text)
     '''
@@ -66,33 +65,33 @@ def debug(text):
     '''
     debug(text)
     '''
-    if __config['debug']:
-        __log(f"{purple('(DEBUG)')} {text}")
+    if _config['debug']:
+        _log(f"{purple('(DEBUG)')} {text}")
 
 def query(text):
     '''
     query(text)
     '''
-    if __config['query']:
-        __log(f"{orange('(QUERY)')} {text}")
+    if _config['query']:
+        _log(f"{orange('(QUERY)')} {text}")
 
 def api(text):
     '''
     api(text)
     '''
-    if __config['api']:
-        __log(f"(API) {text}")
+    if _config['api']:
+        _log(f"{green('(API)')} {text}")
 
 def info(text):
     '''
     info(text)
     '''
-    if __config['info']:
-        __log(f"(INFO) {text}")
+    if _config['info']:
+        _log(f"(INFO) {text}")
 
 def error(text):
     '''
     error(text)
     '''
-    if __config['error']:
-        __log(red(f"(ERROR) {text}"))
+    if _config['error']:
+        _log(red(f"(ERROR) {text}"))

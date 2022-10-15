@@ -20,6 +20,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function showContent(element) {
-  document.getElementById('main').setHTML('');
+  document.getElementById('main').innerHTML = '';
   document.getElementById('main').appendChild(element);
 }

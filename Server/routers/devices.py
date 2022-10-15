@@ -4,15 +4,17 @@ devices.py
 import json
 import flask
 
-from serverlib import database, utils
-from drivers import drivermap
+from serverlib import utils
+from serverlib import database
+import drivers
+
 
 
 router = flask.Blueprint('devices', __name__)
 
 
 
-@router.route('/', methods=['GET'])
+@router.route('', methods=['GET'])
 @utils.check_token
 def get_devices():
     '''
@@ -31,11 +33,11 @@ def post_device_method(driver, method):
     post_device_method
     '''
     data_dict = json.loads(flask.request.data.decode())
-    return drivermap.driver_map[driver][method](data_dict)
+    return drivers.driver_map[driver][method](data_dict)
 
 
 
-@router.route('/', methods=['POST'])
+@router.route('', methods=['POST'])
 @utils.check_token
 def post_device():
     '''
