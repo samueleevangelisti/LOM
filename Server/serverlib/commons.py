@@ -12,6 +12,7 @@ with open('config.json', 'r', encoding='utf-8') as f:
 
 
 
+# TODO DSE questa nuova struttura va utilizzata e non creare pin a caso
 _pin_list = []
 
 

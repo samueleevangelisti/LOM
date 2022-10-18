@@ -76,18 +76,25 @@ def patch_user(patch_user_id):
         response_dict = {}
         if 'pin' in data_dict:
             if data_dict['pin'] is not None:
-                response['success'] = False
-                while not response['success']:
-                    pin = ''.join([str(e(None)) for e in [lambda x: random.randint(0, 9)] * _config['pin_length']])
-                    response = database.update_pin(patch_user_id, pin)
+                pin = commons.get_pin()
+                response = database.update_pin(patch_user_id, pin)
+                if not response['success']:
+                    return {
+                        'success': False,
+                        'error': response['error']
+                    }
                 response_dict['pin'] = pin
             else:
+                pin = database.retrieve_users({
+                    'id': patch_user_id
+                })
                 response = database.delete_pin(patch_user_id)
                 if not response['success']:
                     return {
                         'success': False,
                         'error': response['error']
                     }
+                commons.put_pin(pin)
         if 'rfid' in data_dict:
             if data_dict['rfid'] is None:
                 response = database.delete_rfid(patch_user_id)
