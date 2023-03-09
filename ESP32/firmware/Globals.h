@@ -10,8 +10,11 @@ LiquidCrystal_I2C lcd(LCD_ADDRESS, 16, 2);
 // const String WIFI_SSID = "TIM-32867173";
 // const String WIFI_PASSWORD = "rbRWGmRFlmsXN3GulwBXByaG";
 // (2)
-const String WIFI_SSID = "Telecom-94382493";
-const String WIFI_PASSWORD = "-Lola0123456-";
+// const String WIFI_SSID = "Telecom-94382493";
+// const String WIFI_PASSWORD = "-Lola0123456-";
+// (3)
+const String WIFI_SSID = "Eva Redmi Note 8";
+const String WIFI_PASSWORD = "123456789";
 
 const int BUZZER_FREQUENCY = 1500;
 const int BUZZER_FREQUENCY_SHORT = 1000;
